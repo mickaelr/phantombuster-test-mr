@@ -1,4 +1,4 @@
-import { IPhantom } from './phantom'
+import { IPhantom } from '../phantom'
 
 function PhantomItem(props: IPhantom) {
     return (
