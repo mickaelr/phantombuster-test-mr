@@ -26,10 +26,15 @@ function DashboardPage() {
   }, [])
 
   return (
-    <>
-      <h1 className="text-3xl font-bold">Dashboard</h1>
-      <PhantomList items={phantoms} />
-    </>
+    <div className="container mx-auto">
+      <h1 className="text-3xl font-bold text-slate-900">Dashboard</h1>
+      <div className="flex flex-row mt-8">
+        <div className="min-w-32">Search & Filters</div>
+        <div className="grow">
+          <PhantomList items={phantoms} />
+        </div>
+      </div>
+    </div>
   )
 }
 
