@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import PhantomItem from './PhantomItem';
 
-// More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta = {
   title: 'Dashboard/PhantomItem',
   component: PhantomItem,
