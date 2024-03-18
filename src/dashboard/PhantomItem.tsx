@@ -1,30 +1,30 @@
 import { ClockIcon, EllipsisHorizontalIcon } from '@heroicons/react/24/outline'
-import { IPhantom } from '../phantom'
+import { IPhantom, IPhantomActions } from '../phantom'
 import RemainingTime from './RemainingTime'
 import DropdownMenu, { DropdownMenuItem } from '../common/DropdownMenu';
 
-function PhantomItem(props: IPhantom) {
+function PhantomItem(props: IPhantom & { actions: IPhantomActions }) {
 
-  const renamePhantom = () => {
-    console.log(`rename Phantom ${props.id}`);
-  };
-  const duplicatePhantom = () => {
-    console.log(`duplicate Phantom ${props.id}`);
-  };
-  const deletePhantom = () => {
-    console.log(`delete Phantom ${props.id}`);
-  };
   const phantomMenuItems: DropdownMenuItem[] = [
-    { text: 'Rename', action: renamePhantom },
-    { text: 'Duplicate', action: duplicatePhantom },
-    { text: 'Delete', action: deletePhantom },
+    { 
+      text: 'Rename', 
+      action: () => { props.actions.rename(props.id) },
+    },
+    { 
+      text: 'Duplicate', 
+      action: () => { props.actions.duplicate(props.id) }, 
+    },
+    { 
+      text: 'Delete', 
+      action: () => { props.actions.delete(props.id) }, 
+    },
   ];
 
   return (
     <div className="bg-slate-50 mb-4 p-6 rounded-xl shadow-lg shadow-neutral-400/10 text-slate-500">
       <div className="flex justify-between">
         <h2 className="text-xl font-bold text-slate-900">{ props.name }</h2>
-        <DropdownMenu items={phantomMenuItems}>
+        <DropdownMenu items={phantomMenuItems} refId={props.id}>
           <EllipsisHorizontalIcon className="h-6 w-6 text-slate-500" />
         </DropdownMenu>
       </div>

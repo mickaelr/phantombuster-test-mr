@@ -36,4 +36,10 @@ export type IPhantom = {
                     | "4 times per working hour, excluding weekends"
               )
     }
-}
+};
+
+export type IPhantomActions = {
+    rename: (phantomId: string) => void;
+    duplicate: (phantomId: string) => void;
+    delete: (phantomId: string) => void;
+};

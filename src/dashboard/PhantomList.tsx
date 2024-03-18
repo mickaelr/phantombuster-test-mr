@@ -1,13 +1,13 @@
 import PhantomItem from './PhantomItem'
-import { IPhantom } from '../phantom'
+import { IPhantom, IPhantomActions } from '../phantom'
 
-function PhantomList(props: { items: IPhantom[] }) {
+function PhantomList(props: { items: IPhantom[], actions: IPhantomActions }) {
   
     return (
       <div>
         <div>
           { props.items.map((phantom, index) => (
-            <PhantomItem key={index} {...phantom} />
+            <PhantomItem key={index} {...phantom} actions={props.actions} />
           ))}
         </div>
       </div>
