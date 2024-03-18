@@ -1,28 +1,32 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import PhantomList from './PhantomList';
 import { IPhantom } from '../phantom';
+import useLocalStorage from '../hooks/useLocalStorage';
 
 function DashboardPage() {
-  const [phantoms, setPhantoms] = useState<IPhantom[]>([])
+  const [phantoms, setPhantoms] = useLocalStorage<IPhantom[]>('phantoms', []);
 
   async function fetchPhantoms() {
-    //TODO: check localStorage before fetching from API
-
-    try {
-      const response: Response = await fetch("phantoms.json")
-      if (!response.ok) {
-        throw new Error(`HTTP error: ${response.status}`);
+    if(phantoms.length === 0) {
+      console.log(`Nothing retrieved in useLocalStorage`);
+      try {
+        //NOTE: we could also use a service like https://mocki.io/fake-json-api to be closer to the real version (ie using the network).
+        const response: Response = await fetch("phantoms.json");
+        if (!response.ok) {
+          throw new Error(`HTTP error: ${response.status}`);
+        }
+        const data: IPhantom[] = await response.json();
+        setPhantoms(data);
+      } catch (error) {
+        //TODO: add a way to display an error message on the UI.
+        console.error(`Could not get phantoms: ${error}`);
       }
-      const data: IPhantom[] = await response.json()
-      setPhantoms(data)
-    } catch (error) {
-      //TODO: add a way to display an error message on the UI.
-      console.error(`Could not get phantoms: ${error}`)
     }
   }
 
+  //TODO: check if we should add a cleanup function here
   useEffect(() => {
-    fetchPhantoms()
+    fetchPhantoms();
   }, [])
 
   return (
