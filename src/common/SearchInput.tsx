@@ -9,7 +9,7 @@ type SearchInputProps = {
 
 function SearchInput(props: SearchInputProps) {
   return (
-    <div className='relative'>
+    <div className='relative mb-4'>
         <MagnifyingGlassIcon className="h-4 w-4 absolute left-4 -translate-y-1/2 top-1/2 text-slate-500" />
         <input 
             className="
@@ -19,6 +19,7 @@ function SearchInput(props: SearchInputProps) {
                 rounded-lg 
                 w-full
                 border
+                border-slate-300
                 placeholder:italic
                 hover:ring 
                 hover:ring-highlight/20 
@@ -33,7 +34,7 @@ function SearchInput(props: SearchInputProps) {
             name={props.name} 
             onChange={props.onChange}
         />
-        </div>
+    </div>
   )
 }
   

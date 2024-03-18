@@ -4,6 +4,7 @@ import { IPhantom, IPhantomActions } from '../phantoms';
 import useLocalStorage from '../hooks/useLocalStorage';
 import SearchInput from '../common/SearchInput';
 import { deletePhantom, duplicatePhantom, renamePhantom, searchPhantom } from '../phantoms.actions';
+import SelectableList from '../common/SelectableList';
 
 function DashboardPage() {
   const [phantoms, setPhantoms] = useLocalStorage<IPhantom[]>('phantoms', []);
@@ -31,7 +32,7 @@ function DashboardPage() {
     }
   }
 
-  const handlePhantomRename = (phantomId: string): void => {
+  const handleRename = (phantomId: string): void => {
     try {
       const updatedPhantoms = renamePhantom(phantoms, phantomId);
       setPhantoms([ ...updatedPhantoms ]);
@@ -40,7 +41,7 @@ function DashboardPage() {
     }
   }
 
-  const handlePhantomDuplication = (phantomId: string): void => {
+  const handleDuplication = (phantomId: string): void => {
     try {
       const updatedPhantoms = duplicatePhantom(phantoms, phantomId);
       setPhantoms([ ...updatedPhantoms ]);
@@ -49,7 +50,7 @@ function DashboardPage() {
     }
   }
 
-  const handlePhantomDelete = (phantomId: string): void => {
+  const handleDelete = (phantomId: string): void => {
     try {
       const updatedPhantoms = deletePhantom(phantoms, phantomId);
       setPhantoms([ ...updatedPhantoms ]);
@@ -58,15 +59,20 @@ function DashboardPage() {
     }
   }
 
-  const handlePhantomSearch = (event: ChangeEvent<HTMLInputElement>): void => {
+  const handleSearch = (event: ChangeEvent<HTMLInputElement>): void => {
     setSearchValue(event.target.value);
     setDisplayedPhantoms(searchPhantom(phantoms, event.target.value));
   }
 
+  const handleCategoryFiltering = (option: string): void => {
+    //TODO: add a way to fill the SelectableList options and implement filtering logic
+    console.log(option);
+  }
+
   const phantomActions: IPhantomActions = {
-    rename: handlePhantomRename,
-    duplicate: handlePhantomDuplication,
-    delete: handlePhantomDelete,
+    rename: handleRename,
+    duplicate: handleDuplication,
+    delete: handleDelete,
   };
 
   //TODO: check if we should add a cleanup function here
@@ -85,7 +91,8 @@ function DashboardPage() {
       <h1 className="text-3xl font-bold text-slate-900">Dashboard</h1>
       <div className="flex flex-row gap-12 mt-8">
         <div className="min-w-32">
-          <SearchInput name='Phantom Search' placeholder='Search' onChange={handlePhantomSearch} />
+          <SearchInput name='Phantom Search' placeholder='Search' onChange={handleSearch} />
+          <SelectableList label='Categories' options={['workflow', 'linkedin', 'salesNavigator', 'mail', 'instagram']} onChange={(option) => handleCategoryFiltering(option)} />
         </div>
         <div className="grow">
           <PhantomList items={displayedPhantoms} actions={phantomActions} />

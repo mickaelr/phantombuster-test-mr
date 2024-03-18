@@ -4,7 +4,6 @@ export const searchPhantom = (phantomList: IPhantom[], searchText: string): IPha
     const formattedSearchText = searchText.toLowerCase().trim();
     console.info(`Searching phantoms with ${formattedSearchText}`);
     const phantomSearchResult: IPhantom[] = phantomList.filter((item: IPhantom) => (item.name.toLowerCase().trim().includes(formattedSearchText)));
-    console.info(JSON.stringify(phantomSearchResult));
     return phantomSearchResult;
   }
 
