@@ -1,14 +1,21 @@
-import { useEffect } from 'react'
+import { ChangeEvent, useEffect, useMemo, useState } from 'react'
 import PhantomList from './PhantomList';
-import { IPhantom, IPhantomActions } from '../phantom';
+import { IPhantom, IPhantomActions } from '../phantoms';
 import useLocalStorage from '../hooks/useLocalStorage';
+import SearchInput from '../common/SearchInput';
+import { deletePhantom, duplicatePhantom, renamePhantom, searchPhantom } from '../phantoms.actions';
 
 function DashboardPage() {
   const [phantoms, setPhantoms] = useLocalStorage<IPhantom[]>('phantoms', []);
+  const [displayedPhantoms, setDisplayedPhantoms] = useState<IPhantom[]>([]);
+  const [searchValue, setSearchValue] = useState<string>('');
+
+  // memoized variables to avoid weird behaviours due to the way Javascript compare objects (by references instead of contents)
+  const phantomsDependency: string = useMemo(() => phantoms.map((phantom) => phantom.id).join(','), [phantoms]);
 
   async function fetchPhantoms() {
     if(phantoms.length === 0) {
-      console.log(`Nothing retrieved in useLocalStorage`);
+      console.info(`Nothing retrieved from useLocalStorage`);
       try {
         //NOTE: we could also use a service like https://mocki.io/fake-json-api to be closer to the real version (ie using the network).
         const response: Response = await fetch("phantoms.json");
@@ -24,51 +31,42 @@ function DashboardPage() {
     }
   }
 
-  const renamePhantom = (phantomId: string): void => {
-    console.log(`renaming phantom ${phantomId}`);
-  }
-
-  const duplicatePhantom = (phantomId: string): void => {
-    console.log(`duplicating phantom ${phantomId}`);
-
-    const phantomToDuplicateArray: IPhantom[] = phantoms.filter((item: IPhantom) => (item.id === phantomId));
-    if(phantomToDuplicateArray.length === 0) {
-      //TODO: add a way to display an error message on the UI.
-      console.error(`Cannot duplicate phantoms ${phantomId}: not found`);
-    } else if(phantomToDuplicateArray.length === 1) {
-      const phantomToDuplicate: IPhantom = phantomToDuplicateArray[0];
-      //NOTE: we implemented the most basic way to generate a unique ID, by using current epoch time
-      // obviously this can't be used for a production app, but in that case the backend or the DB will be in charge of that.
-      const duplicatedPhantom: IPhantom = { ...phantomToDuplicate, id: Date.now().valueOf().toString() }
-      setPhantoms([ ...phantoms, duplicatedPhantom ]);
-      //TODO: also save in localStorage
-    } else {
-      //TODO: add a way to display an error message on the UI.
-      console.error(`Cannot duplicate phantoms ${phantomId}: more than one phantom found with same ID`);
+  const handlePhantomRename = (phantomId: string): void => {
+    try {
+      const updatedPhantoms = renamePhantom(phantoms, phantomId);
+      setPhantoms([ ...updatedPhantoms ]);
+    } catch (error) {
+      console.error(error instanceof Error ? error.message : `An error occured during phantom ${phantomId} renaming`);
     }
   }
 
-  const deletePhantom = (phantomId: string): void => {
-    console.log(`deleting phantom ${phantomId}`);
-  
-    const newPhantomList: IPhantom[] = [ ...phantoms ];
-    //TODO: handle errors (if zero or several items are found by below filter)
-    newPhantomList.filter((item: IPhantom, index: number, array: IPhantom[]) => {
-      if (item.id === phantomId) {
-        // Removes the value from the original array
-        array.splice(index, 1);
-        return true;
-      }
-      return false;
-    });
-    setPhantoms(newPhantomList);
-    //TODO: also save in localStorage
+  const handlePhantomDuplication = (phantomId: string): void => {
+    try {
+      const updatedPhantoms = duplicatePhantom(phantoms, phantomId);
+      setPhantoms([ ...updatedPhantoms ]);
+    } catch (error) {
+      console.error(error instanceof Error ? error.message : `An error occured during phantom ${phantomId} duplication`);
+    }
+  }
+
+  const handlePhantomDelete = (phantomId: string): void => {
+    try {
+      const updatedPhantoms = deletePhantom(phantoms, phantomId);
+      setPhantoms([ ...updatedPhantoms ]);
+    } catch (error) {
+      console.error(error instanceof Error ? error.message : `An error occured during phantom ${phantomId} deletion`);
+    }
+  }
+
+  const handlePhantomSearch = (event: ChangeEvent<HTMLInputElement>): void => {
+    setSearchValue(event.target.value);
+    setDisplayedPhantoms(searchPhantom(phantoms, event.target.value));
   }
 
   const phantomActions: IPhantomActions = {
-    rename: renamePhantom,
-    duplicate: duplicatePhantom,
-    delete: deletePhantom,
+    rename: handlePhantomRename,
+    duplicate: handlePhantomDuplication,
+    delete: handlePhantomDelete,
   };
 
   //TODO: check if we should add a cleanup function here
@@ -76,13 +74,21 @@ function DashboardPage() {
     fetchPhantoms();
   }, []);
 
+  //TODO: check if we should add a cleanup function here
+  useEffect(() => {
+    console.log('updating displayedPhantoms');
+    setDisplayedPhantoms(searchPhantom(phantoms, searchValue));
+  }, [searchValue, phantomsDependency]);
+
   return (
     <div className="container mx-auto">
       <h1 className="text-3xl font-bold text-slate-900">Dashboard</h1>
-      <div className="flex flex-row mt-8">
-        <div className="min-w-32">Search & Filters</div>
+      <div className="flex flex-row gap-12 mt-8">
+        <div className="min-w-32">
+          <SearchInput name='Phantom Search' placeholder='Search' onChange={handlePhantomSearch} />
+        </div>
         <div className="grow">
-          <PhantomList items={phantoms} actions={phantomActions} />
+          <PhantomList items={displayedPhantoms} actions={phantomActions} />
         </div>
       </div>
     </div>

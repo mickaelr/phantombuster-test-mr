@@ -1,5 +1,5 @@
 import { ClockIcon, EllipsisHorizontalIcon } from '@heroicons/react/24/outline'
-import { IPhantom, IPhantomActions } from '../phantom'
+import { IPhantom, IPhantomActions } from '../phantoms'
 import RemainingTime from './RemainingTime'
 import DropdownMenu, { DropdownMenuItem } from '../common/DropdownMenu';
 
@@ -25,11 +25,11 @@ function PhantomItem(props: IPhantom & { actions: IPhantomActions }) {
       <div className="flex justify-between">
         <h2 className="text-xl font-bold text-slate-900">{ props.name }</h2>
         <DropdownMenu items={phantomMenuItems} refId={props.id}>
-          <EllipsisHorizontalIcon className="h-6 w-6 text-slate-500" />
+          <EllipsisHorizontalIcon className="h-4 w-4 text-slate-500" />
         </DropdownMenu>
       </div>
       <div>{ props.repeatedLaunchTimes?.simplePreset }</div>
-      <ClockIcon className="h-6 w-6 text-slate-500" />
+      <ClockIcon className="h-4 w-4 text-slate-500" />
       <RemainingTime minutesRemaining={ props.nextLaunchIn } />
     </div>
   )
