@@ -1,23 +1,22 @@
-import { ChangeEvent, useId, useState } from "react";
+import { useId, useState } from "react";
 
 type SelectableListProps = {
     label: string;
-    options: string[];
-    onChange: (value: string) => void;
+    options: Set<string>;
+    onChange: (value: string | null) => void;
   }
 
 function SelectableList(props: SelectableListProps) {
   const id = useId();
-  const emptyValue = '';
-  const [selectedOption, setSelectedOption] = useState<string>(emptyValue);
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
   const onOptionClicked = (option: string) => {
     if(selectedOption !== option) {
       setSelectedOption(option);
       props.onChange(option);
     } else {
-      setSelectedOption(emptyValue);
-      props.onChange(emptyValue);
+      setSelectedOption(null);
+      props.onChange(null);
     }
   }
 
@@ -25,7 +24,7 @@ function SelectableList(props: SelectableListProps) {
     <div className='mb-4'>
       <div className='py-2 text-xs text-slate-500'>{props.label}</div>
       <ul>
-        { props.options.map((option, index) => {
+        { Array.from(props.options).map((option, index) => {
           const capitalizedValue = option.charAt(0).toUpperCase() + option.slice(1);
           const itemKey: string = `${id}_${index}`;
           return (

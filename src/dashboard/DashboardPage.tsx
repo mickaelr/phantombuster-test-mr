@@ -1,15 +1,18 @@
 import { ChangeEvent, useEffect, useMemo, useState } from 'react'
 import PhantomList from './PhantomList';
-import { IPhantom, IPhantomActions } from '../phantoms';
+import { IPhantom, IPhantomActions, IPhantomFilterValues } from '../phantoms';
 import useLocalStorage from '../hooks/useLocalStorage';
 import SearchInput from '../common/SearchInput';
-import { deletePhantom, duplicatePhantom, renamePhantom, searchPhantom } from '../phantoms.actions';
+import { deletePhantom, duplicatePhantom, renamePhantom } from '../phantoms.actions';
+import { extractPhantomsCategories, filterPhantoms } from '../phantoms.filters';
 import SelectableList from '../common/SelectableList';
 
 function DashboardPage() {
   const [phantoms, setPhantoms] = useLocalStorage<IPhantom[]>('phantoms', []);
   const [displayedPhantoms, setDisplayedPhantoms] = useState<IPhantom[]>([]);
   const [searchValue, setSearchValue] = useState<string>('');
+  const [categories, setCategories] = useState<Set<string>>(new Set());
+  const [categoryFilter, setCategoryFilter] = useState<string | null>(null);
 
   // memoized variables to avoid weird behaviours due to the way Javascript compare objects (by references instead of contents)
   const phantomsDependency: string = useMemo(() => phantoms.map((phantom) => phantom.id).join(','), [phantoms]);
@@ -61,12 +64,10 @@ function DashboardPage() {
 
   const handleSearch = (event: ChangeEvent<HTMLInputElement>): void => {
     setSearchValue(event.target.value);
-    setDisplayedPhantoms(searchPhantom(phantoms, event.target.value));
   }
 
-  const handleCategoryFiltering = (option: string): void => {
-    //TODO: add a way to fill the SelectableList options and implement filtering logic
-    console.log(option);
+  const handleCategoryFiltering = (option: string | null): void => {
+    setCategoryFilter(option);
   }
 
   const phantomActions: IPhantomActions = {
@@ -82,17 +83,25 @@ function DashboardPage() {
 
   //TODO: check if we should add a cleanup function here
   useEffect(() => {
-    console.log('updating displayedPhantoms');
-    setDisplayedPhantoms(searchPhantom(phantoms, searchValue));
-  }, [searchValue, phantomsDependency]);
+    console.info('updating categories');
+    setCategories(extractPhantomsCategories(phantoms));
 
+    console.info('updating displayedPhantoms');
+    const filters: IPhantomFilterValues = {
+      search: searchValue, 
+      category: categoryFilter
+    }
+    setDisplayedPhantoms(filterPhantoms(phantoms, filters));
+  }, [searchValue, categoryFilter, phantomsDependency]);
+
+  //TODO: add a button to reset the localStorage cache
   return (
     <div className="container mx-auto">
       <h1 className="text-3xl font-bold text-slate-900">Dashboard</h1>
       <div className="flex flex-row gap-12 mt-8">
         <div className="min-w-32">
           <SearchInput name='Phantom Search' placeholder='Search' onChange={handleSearch} />
-          <SelectableList label='Categories' options={['workflow', 'linkedin', 'salesNavigator', 'mail', 'instagram']} onChange={(option) => handleCategoryFiltering(option)} />
+          <SelectableList label='Categories' options={categories} onChange={(option) => handleCategoryFiltering(option)} />
         </div>
         <div className="grow">
           <PhantomList items={displayedPhantoms} actions={phantomActions} />

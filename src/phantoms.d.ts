@@ -43,3 +43,14 @@ export type IPhantomActions = {
     duplicate: (phantomId: string) => void;
     delete: (phantomId: string) => void;
 };
+
+export type IPhantomFilterValues = {
+    search: string;
+    category: string | null;
+}
+
+export type IPhantomFilterFunction<T> = (phantomList: IPhantom[], valueToFilter: T) => IPhantom[];
+
+export type IPhantomFilterFunctions = {
+    [K in keyof IPhantomFilterTypes]?: IPhantomFilterFunction<typeof K>;
+}
