@@ -3,7 +3,7 @@ import PhantomList from './PhantomList';
 import { IPhantom, IPhantomActions, IPhantomFilterValues } from '../phantoms';
 import useLocalStorage from '../hooks/useLocalStorage';
 import SearchInput from '../common/SearchInput';
-import { deletePhantom, duplicatePhantom, renamePhantom } from '../phantoms.actions';
+import { deletePhantom, duplicatePhantom, fetchPhantoms, renamePhantom } from '../phantoms.actions';
 import { extractPhantomsCategories, filterPhantoms } from '../phantoms.filters';
 import SelectableList from '../common/SelectableList';
 
@@ -17,17 +17,12 @@ function DashboardPage() {
   // memoized variables to avoid weird behaviours due to the way Javascript compare objects (by references instead of contents)
   const phantomsDependency: string = useMemo(() => phantoms.map((phantom) => phantom.id).join(','), [phantoms]);
 
-  async function fetchPhantoms() {
+  async function getPhantoms(): Promise<void> {
     if(phantoms.length === 0) {
-      console.info(`Nothing retrieved from useLocalStorage`);
+      // Nothing retrieved from locaStorage
       try {
-        //NOTE: we could also use a service like https://mocki.io/fake-json-api to be closer to the real version (ie using the network).
-        const response: Response = await fetch("phantoms.json");
-        if (!response.ok) {
-          throw new Error(`HTTP error: ${response.status}`);
-        }
-        const data: IPhantom[] = await response.json();
-        setPhantoms(data);
+        const phantoms: IPhantom[] = await fetchPhantoms();
+        setPhantoms(phantoms);
       } catch (error) {
         //TODO: add a way to display an error message on the UI.
         console.error(`Could not get phantoms: ${error}`);
@@ -78,7 +73,7 @@ function DashboardPage() {
 
   //TODO: check if we should add a cleanup function here
   useEffect(() => {
-    fetchPhantoms();
+    getPhantoms();
   }, []);
 
   //TODO: check if we should add a cleanup function here
@@ -97,8 +92,8 @@ function DashboardPage() {
   //TODO: add a button to reset the localStorage cache
   return (
     <div className="container mx-auto">
-      <h1 className="text-3xl font-bold text-slate-900">Dashboard</h1>
-      <div className="flex flex-row gap-12 mt-8">
+      <h1 className="text-3xl font-bold text-slate-900 mb-8">Dashboard</h1>
+      <div className="flex flex-row gap-12">
         <div className="min-w-32">
           <SearchInput name='Phantom Search' placeholder='Search' onChange={handleSearch} />
           <SelectableList label='Categories' options={categories} onChange={(option) => handleCategoryFiltering(option)} />

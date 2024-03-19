@@ -1,4 +1,19 @@
 import { IPhantom } from "./phantoms";
+import { filterById } from "./phantoms.filters";
+
+export async function fetchPhantoms(): Promise<IPhantom[]> {
+  try {
+    //NOTE: we could also use a service like https://mocki.io/fake-json-api to be closer to the real version (ie using the network).
+    const response: Response = await fetch("phantoms.json");
+    if(!response.ok) {
+      throw new Error(`HTTP error: ${response.status}`);
+    }
+    const allPhantoms: IPhantom[] = await response.json();
+    return allPhantoms;
+  } catch (error) {
+    return Promise.reject();
+  }
+};
 
 export const renamePhantom = (phantomList: IPhantom[], phantomId: string): IPhantom[] => {
   console.info(`Renaming phantom ${phantomId}`);
@@ -8,7 +23,7 @@ export const renamePhantom = (phantomList: IPhantom[], phantomId: string): IPhan
 export const duplicatePhantom = (phantomList: IPhantom[], phantomId: string): IPhantom[] => {
   console.info(`Duplicating phantom ${phantomId}`);
 
-  const phantomToDuplicateArray: IPhantom[] = phantomList.filter((item: IPhantom) => (item.id === phantomId));
+  const phantomToDuplicateArray: IPhantom[] = filterById(phantomList, phantomId);
   if(phantomToDuplicateArray.length === 0) {
     //TODO: add a way to display an error message on the UI.
     throw new Error(`Cannot duplicate phantoms ${phantomId}: not found`);

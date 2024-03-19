@@ -1,5 +1,9 @@
 import { IPhantom, IPhantomFilterFunction, IPhantomFilterFunctions, IPhantomFilterValues } from "./phantoms";
 
+export const filterById: IPhantomFilterFunction<string> = (phantoms: IPhantom[], id: string): IPhantom[] => {
+  return phantoms.filter((item: IPhantom) => (item.id === id));
+}
+
 export const extractPhantomsCategories = (phantoms: IPhantom[]): Set<string> => {
   let resultCategories: Set<string> = new Set();
   phantoms.map((phantom: IPhantom) => {
