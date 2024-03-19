@@ -1,15 +1,9 @@
-import { Navigate, Route, Routes } from 'react-router-dom';
-import DashboardPage from './pages/dashboard/DashboardPage';
-import PhantomDetailsPage from './pages/phantom-details/PhantomDetailsPage';
+import { Outlet } from 'react-router-dom';
 
 function App() {
-
+  //NOTE: this component could be a good starting point to build a common layout for the whole app
   return (
-    <Routes>
-      <Route path='*' element={<Navigate to='/phantoms' />} />
-      <Route path="/phantoms" element={<DashboardPage />} />
-      <Route path="phantoms/:phantomId" element={<PhantomDetailsPage />} />
-    </Routes>
+    <Outlet />
   )
 }
 

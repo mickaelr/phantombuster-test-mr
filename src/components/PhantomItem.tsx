@@ -24,7 +24,6 @@ function PhantomItem(props: IPhantom & { actions?: IPhantomActions }) {
     ];
   }
 
-
   return (
     <div className="bg-slate-50 mb-4 p-6 rounded-xl shadow-lg shadow-neutral-400/10 text-slate-500">
       <div className="flex justify-between">

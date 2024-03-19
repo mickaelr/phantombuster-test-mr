@@ -1,10 +1,10 @@
 import { IPhantom } from "./phantoms";
 import { filterById } from "./phantoms.filters";
 
-export async function fetchPhantoms(): Promise<IPhantom[]> {
+export async function fetchPhantoms(controller?: AbortController): Promise<IPhantom[]> {
   try {
     //NOTE: we could also use a service like https://mocki.io/fake-json-api to be closer to the real version (ie using the network).
-    const response: Response = await fetch("phantoms.json");
+    const response: Response = await fetch("phantoms.json", { signal: controller?.signal });
     if(!response.ok) {
       throw new Error(`HTTP error: ${response.status}`);
     }

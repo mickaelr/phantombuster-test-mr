@@ -12,13 +12,13 @@ function PhantomDetailsPage() {
   const [phantoms, setPhantoms] = useLocalStorage<IPhantom[]>('phantoms', []);
   const [phantom, setPhantom] = useState<IPhantom>();
 
-  async function getPhantom(phantomId: string): Promise<void> {
+  async function getPhantom(phantomId: string, controller?: AbortController): Promise<void> {
     if(phantoms.length > 0) {
       findPhantomById(phantoms, phantomId);
     } else {
       // Nothing retrieved from locaStorage
       try {
-        const allPhantoms: IPhantom[] = await fetchPhantoms();
+        const allPhantoms: IPhantom[] = await fetchPhantoms(controller);
         setPhantoms(allPhantoms);
         findPhantomById(allPhantoms, phantomId);
       } catch (error) {
@@ -37,14 +37,19 @@ function PhantomDetailsPage() {
     }
   }
 
-  //TODO: check if we should add a cleanup function here
   useEffect(() => {
+    const controller = new AbortController();
     if(phantomId) {
-      getPhantom(phantomId);
+      getPhantom(phantomId, controller);
     } else {
       //TODO: add a way to display an error message on the UI.
       console.error(`Could not display this page for null phantomId`);
     }
+
+    // cleanup function to avoid a fetch request to continue 
+    return () => {
+      controller.abort();
+    };
   }, []);
 
   return (
@@ -56,8 +61,9 @@ function PhantomDetailsPage() {
         </div>
       </Link>
       {phantom ? (
+        
           <PhantomItem { ...phantom } />
-        ) : null}
+      ) : null}
     </div>
   )
 }
