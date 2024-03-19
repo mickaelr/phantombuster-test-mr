@@ -22,7 +22,7 @@ function SelectableList(props: SelectableListProps) {
 
   return (
     <div className='mb-4'>
-      <div className='py-2 text-xs text-slate-500'>{props.label}</div>
+      <div className='selectable-list-label'>{props.label}</div>
       <ul>
         { Array.from(props.options).map((option, index) => {
           const capitalizedValue = option.charAt(0).toUpperCase() + option.slice(1);
@@ -32,7 +32,7 @@ function SelectableList(props: SelectableListProps) {
               value={option} 
               key={itemKey} 
               onClick={() => onOptionClicked(option)} 
-              className={(option === selectedOption ? 'selected font-bold bg-blue-800 text-slate-50' : '') + ' px-3 py-1 mt-2 rounded-md cursor-pointer'}
+              className={(option === selectedOption ? 'selected selected-item' : '') + ' selectable-item'}
             >
               {capitalizedValue}
             </li>

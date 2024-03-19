@@ -1,3 +1,51 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+    .h1 {
+        @apply text-3xl font-bold text-slate-900;
+    }
+    .h2 {
+        @apply text-xl font-bold text-slate-900;
+    }
+    .icon-sm {
+        @apply h-4 w-4 text-slate-500;
+    }
+
+    .card {
+        @apply bg-slate-50 mb-4 p-6 rounded-xl shadow-lg shadow-neutral-400/10;
+    }
+    .dropdown-menu-container {
+        @apply absolute top-full right-0 bg-slate-50 p-1 rounded-xl shadow-lg shadow-neutral-400/10 text-slate-900;
+    }
+    .dropdown-menu-item {
+        @apply w-full p-2 rounded-lg text-left whitespace-nowrap hover:bg-neutral-200;
+    }
+
+    .input {
+        @apply pl-10 py-3 pr-4 rounded-lg w-full border border-slate-300 placeholder:italic;
+    }
+    .input:hover {
+        @apply ring;
+    }
+    .input:focus {
+        @apply ring;
+    }
+    .input:active {
+        @apply border-0 ring-0;
+    }
+    .input:focus-visible {
+        @apply outline-none;
+    }
+
+    .selectable-list-label {
+        @apply py-2 text-xs text-slate-500;
+    }
+    .selectable-item {
+        @apply px-3 py-1 mt-2 rounded-md cursor-pointer;
+    }
+    .selected-item {
+        @apply font-bold bg-blue-800 text-slate-50;
+    }
+  }

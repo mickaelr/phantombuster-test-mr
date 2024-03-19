@@ -6,7 +6,6 @@ export type DecomposedTime = {
 
 export const convertRemainingTime = (minutesRemaining: number): DecomposedTime => {
     if(!minutesRemaining) {
-        //TODO: check if it's better in our case to throw an Error instead of default value?
         return { days: 0, hours: 0, minutes: 0 };
     }
 

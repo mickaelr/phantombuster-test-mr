@@ -22,8 +22,7 @@ function PhantomDetailsPage() {
         setPhantoms(allPhantoms);
         findPhantomById(allPhantoms, phantomId);
       } catch (error) {
-        //TODO: add a way to display an error message on the UI.
-        console.error(`Could not get phantoms: ${error}`);
+        throw new Error(`Could not get phantom: ${error}`);
       }
     }
   }
@@ -42,8 +41,7 @@ function PhantomDetailsPage() {
     if(phantomId) {
       getPhantom(phantomId, controller);
     } else {
-      //TODO: add a way to display an error message on the UI.
-      console.error(`Could not display this page for null phantomId`);
+      throw new Error(`Could not display this page for null phantomId`);
     }
 
     // cleanup function to avoid a fetch request to continue 
@@ -56,7 +54,7 @@ function PhantomDetailsPage() {
     <div className="container mx-auto my-10">
       <Link to='/phantoms'>
         <div className="flex items-center flex-wrap gap-4 text-lg text-blue-800 mb-8">
-          <ChevronLeftIcon className="h-4 w-4 text-slate-500" />
+          <ChevronLeftIcon className="icon-sm" />
           Back to the Dashboard
         </div>
       </Link>

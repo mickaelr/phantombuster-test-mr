@@ -25,14 +25,14 @@ function PhantomItem(props: IPhantom & { actions?: IPhantomActions }) {
   }
 
   return (
-    <div className="bg-slate-50 mb-4 p-6 rounded-xl shadow-lg shadow-neutral-400/10 text-slate-500">
+    <div className="card text-slate-500">
       <div className="flex justify-between">
         <Link to={`${props.id}`}>
-          <h2 className="text-xl font-bold text-slate-900 mb-3">{ props.name }</h2>
+          <h2 className="h2 mb-3">{ props.name }</h2>
         </Link>
         {(phantomMenuItems && phantomMenuItems.length > 0) ? (
           <DropdownMenu items={phantomMenuItems} refId={props.id}>
-            <EllipsisHorizontalIcon className="h-4 w-4 text-slate-500" />
+            <EllipsisHorizontalIcon className="icon-sm" />
           </DropdownMenu>
         ) : null}
       </div>
@@ -45,7 +45,7 @@ function PhantomItem(props: IPhantom & { actions?: IPhantomActions }) {
         ) : null}
         {props.nextLaunchIn ? (
           <>
-            <ClockIcon className="h-4 w-4 text-slate-500" />
+            <ClockIcon className="icon-sm" />
             <RemainingTime minutesRemaining={ props.nextLaunchIn } />
           </>
         ) : null}

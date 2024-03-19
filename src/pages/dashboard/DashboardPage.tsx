@@ -31,8 +31,7 @@ function DashboardPage() {
         const phantoms: IPhantom[] = await fetchPhantoms(controller);
         setPhantoms(phantoms);
       } catch (error) {
-        //TODO: add a way to display an error message on the UI.
-        console.error(`Could not get phantoms: ${error}`);
+        throw new Error(`Could not get phantoms: ${error}`);
       } finally {
         setPhantomsLoading(false);
       }
@@ -99,13 +98,12 @@ function DashboardPage() {
     setDisplayedPhantoms(filterPhantoms(phantoms, filters));
   }, [phantomsDependency, filters.search, filters.category]);
 
-  //TODO: add a button to reset the localStorage cache
   return (
     <div className="container mx-auto my-10">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-slate-900">Dashboard</h1>
+        <h1 className="h1">Dashboard</h1>
         <button onClick={resetCache}>
-          <ArrowPathIcon className="h-4 w-4 text-slate-500" />
+          <ArrowPathIcon className="icon-sm" />
         </button>
       </div>
       <div className="flex flex-row gap-12">
