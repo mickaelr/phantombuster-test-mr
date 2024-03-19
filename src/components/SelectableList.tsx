@@ -32,7 +32,7 @@ function SelectableList(props: SelectableListProps) {
               value={option} 
               key={itemKey} 
               onClick={() => onOptionClicked(option)} 
-              className={(option === selectedOption ? 'font-bold bg-blue-800 text-slate-50' : '') + ' px-3 py-1 mt-2 rounded-md cursor-pointer'}
+              className={(option === selectedOption ? 'selected font-bold bg-blue-800 text-slate-50' : '') + ' px-3 py-1 mt-2 rounded-md cursor-pointer'}
             >
               {capitalizedValue}
             </li>
