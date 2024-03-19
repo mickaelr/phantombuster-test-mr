@@ -1,10 +1,10 @@
 import { Link, useParams } from 'react-router-dom';
-import { IPhantom } from '../phantoms';
+import { IPhantom } from '../../phantoms';
 import { useEffect, useState } from 'react';
-import { fetchPhantoms } from '../phantoms.actions';
-import useLocalStorage from '../hooks/useLocalStorage';
-import { filterById } from '../phantoms.filters';
-import PhantomItem from '../dashboard/PhantomItem';
+import { fetchPhantoms } from '../../phantoms.actions';
+import useLocalStorage from '../../hooks/useLocalStorage';
+import { filterById } from '../../phantoms.filters';
+import PhantomItem from '../../components/PhantomItem';
 import { ChevronLeftIcon } from '@heroicons/react/24/outline';
 
 function PhantomDetailsPage() {

@@ -1,7 +1,7 @@
 import { ClockIcon, EllipsisHorizontalIcon } from '@heroicons/react/24/outline'
 import { IPhantom, IPhantomActions } from '../phantoms'
 import RemainingTime from './RemainingTime'
-import DropdownMenu, { DropdownMenuItem } from '../common/DropdownMenu';
+import DropdownMenu, { DropdownMenuItem } from './DropdownMenu';
 import { Link } from 'react-router-dom';
 
 function PhantomItem(props: IPhantom & { actions?: IPhantomActions }) {

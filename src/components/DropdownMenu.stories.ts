@@ -20,6 +20,7 @@ export const SimpleMenu: Story = {
       { text: 'First action', action: () => { alert('First action clicked') } },
       { text: '2nd action', action: () => { alert('2nd action clicked') } }
     ],
+    refId: 'randomId',
     children: 'Menu'
   },
   play: async ({ canvasElement }) => {

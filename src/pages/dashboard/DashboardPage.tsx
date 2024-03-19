@@ -1,11 +1,11 @@
 import { ChangeEvent, useEffect, useMemo, useState } from 'react'
 import PhantomList from './PhantomList';
-import { IPhantom, IPhantomActions, IPhantomFilterValues } from '../phantoms';
-import useLocalStorage from '../hooks/useLocalStorage';
-import SearchInput from '../common/SearchInput';
-import { deletePhantom, duplicatePhantom, fetchPhantoms, renamePhantom } from '../phantoms.actions';
-import { extractPhantomsCategories, filterPhantoms } from '../phantoms.filters';
-import SelectableList from '../common/SelectableList';
+import { IPhantom, IPhantomActions, IPhantomFilterValues } from '../../phantoms';
+import useLocalStorage from '../../hooks/useLocalStorage';
+import SearchInput from '../../components/SearchInput';
+import { deletePhantom, duplicatePhantom, fetchPhantoms, renamePhantom } from '../../phantoms.actions';
+import { extractPhantomsCategories, filterPhantoms } from '../../phantoms.filters';
+import SelectableList from '../../components/SelectableList';
 
 function DashboardPage() {
   const [phantoms, setPhantoms] = useLocalStorage<IPhantom[]>('phantoms', []);

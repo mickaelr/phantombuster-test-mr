@@ -49,3 +49,29 @@ export const ReapetedLaunch: Story = {
     nextLaunchIn: 180
   },
 };
+
+export const WithMenu: Story = {
+  args: {
+    id: "2",
+    name: "My Second Phantom",
+    script: "My Second Phantom.js",
+    manifest: {
+        "tags": {
+            "categories": [
+                "linkedin",
+                "mail",
+            ]
+        }
+    },
+    launchType: "repeatedly",
+    repeatedLaunchTimes: {
+        "simplePreset": "Once per day"
+    },
+    nextLaunchIn: 180,
+    actions: {
+      rename: () => { alert('Rename action') },
+      duplicate: () => { alert('Duplicate action') },
+      delete: () => { alert('Delete action') },
+    },
+  },
+};

@@ -16,11 +16,11 @@ type Story = StoryObj<typeof meta>;
 export const SimpleSelectableList: Story = {
   args: {
     label: 'Simple selectable list',
-    options: [
+    options: new Set([
       'option 1',
       'option 2',
       'option 3',
-    ],
+    ]),
     onChange: () => { console.log('selected value changed') },
   },
 };

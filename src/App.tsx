@@ -1,6 +1,6 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
-import DashboardPage from './dashboard/DashboardPage';
-import PhantomDetailsPage from './phantom-details/PhantomDetailsPage';
+import DashboardPage from './pages/dashboard/DashboardPage';
+import PhantomDetailsPage from './pages/phantom-details/PhantomDetailsPage';
 
 function App() {
 

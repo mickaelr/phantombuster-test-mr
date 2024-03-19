@@ -1,5 +1,5 @@
-import PhantomItem from './PhantomItem'
-import { IPhantom, IPhantomActions } from '../phantoms'
+import PhantomItem from '../../components/PhantomItem'
+import { IPhantom, IPhantomActions } from '../../phantoms'
 
 function PhantomList(props: { items: IPhantom[], actions: IPhantomActions }) {
   return (
