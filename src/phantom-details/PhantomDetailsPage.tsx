@@ -1,10 +1,11 @@
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { IPhantom } from '../phantoms';
 import { useEffect, useState } from 'react';
 import { fetchPhantoms } from '../phantoms.actions';
 import useLocalStorage from '../hooks/useLocalStorage';
 import { filterById } from '../phantoms.filters';
 import PhantomItem from '../dashboard/PhantomItem';
+import { ChevronLeftIcon } from '@heroicons/react/24/outline';
 
 function PhantomDetailsPage() {
   const {phantomId} = useParams();
@@ -47,8 +48,13 @@ function PhantomDetailsPage() {
   }, []);
 
   return (
-    <div className="container mx-auto">
-      <h1 className="text-3xl font-bold text-slate-900 mb-8">Phantom</h1>
+    <div className="container mx-auto my-10">
+      <Link to='/phantoms'>
+        <div className="flex items-center flex-wrap gap-4 text-lg text-blue-800 mb-8">
+          <ChevronLeftIcon className="h-4 w-4 text-slate-500" />
+          Back to the Dashboard
+        </div>
+      </Link>
       {phantom ? (
           <PhantomItem { ...phantom } />
         ) : null}

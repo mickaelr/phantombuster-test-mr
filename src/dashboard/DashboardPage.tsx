@@ -91,7 +91,7 @@ function DashboardPage() {
 
   //TODO: add a button to reset the localStorage cache
   return (
-    <div className="container mx-auto">
+    <div className="container mx-auto my-10">
       <h1 className="text-3xl font-bold text-slate-900 mb-8">Dashboard</h1>
       <div className="flex flex-row gap-12">
         <div className="min-w-32">

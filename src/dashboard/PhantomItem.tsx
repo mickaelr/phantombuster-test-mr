@@ -29,7 +29,7 @@ function PhantomItem(props: IPhantom & { actions?: IPhantomActions }) {
     <div className="bg-slate-50 mb-4 p-6 rounded-xl shadow-lg shadow-neutral-400/10 text-slate-500">
       <div className="flex justify-between">
         <Link to={`${props.id}`}>
-          <h2 className="text-xl font-bold text-slate-900">{ props.name }</h2>
+          <h2 className="text-xl font-bold text-slate-900 mb-3">{ props.name }</h2>
         </Link>
         {(phantomMenuItems && phantomMenuItems.length > 0) ? (
           <DropdownMenu items={phantomMenuItems} refId={props.id}>
@@ -37,9 +37,20 @@ function PhantomItem(props: IPhantom & { actions?: IPhantomActions }) {
           </DropdownMenu>
         ) : null}
       </div>
-      <div>{ props.repeatedLaunchTimes?.simplePreset }</div>
-      <ClockIcon className="h-4 w-4 text-slate-500" />
-      <RemainingTime minutesRemaining={ props.nextLaunchIn } />
+      <div className="flex items-center flex-wrap gap-3">
+        {props.repeatedLaunchTimes?.simplePreset ? (
+          <span>{ props.repeatedLaunchTimes?.simplePreset }</span>
+        ) : null}
+        {(props.repeatedLaunchTimes?.simplePreset && props.nextLaunchIn) ? (
+          <span className="border-l-2 h-4 border-slate-300"></span>
+        ) : null}
+        {props.nextLaunchIn ? (
+          <>
+            <ClockIcon className="h-4 w-4 text-slate-500" />
+            <RemainingTime minutesRemaining={ props.nextLaunchIn } />
+          </>
+        ) : null}
+      </div>
     </div>
   )
 }
