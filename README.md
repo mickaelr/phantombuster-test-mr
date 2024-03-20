@@ -13,6 +13,10 @@ Based on a technical requirement and on personal choices here's what has been ad
 - For documentation & interaction testing: Storybook
 - For routing: React Router
 
+N.B.: Locally developed/tested with:
+- Node 20.11.1
+- Yarn 1.22.22
+
 ## How to
 
 ### Run local server
