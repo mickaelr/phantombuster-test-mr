@@ -2,7 +2,7 @@ import { ExclamationTriangleIcon } from "@heroicons/react/24/outline"
 import { useRouteError } from "react-router-dom";
 
 function ErrorPage() {
-    let error = useRouteError();
+    const error = useRouteError();
     console.error(error);
 
     return (

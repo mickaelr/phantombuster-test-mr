@@ -31,7 +31,7 @@ function SelectableList(props: SelectableListProps) {
             <li 
               value={option} 
               key={itemKey} 
-              onClick={() => onOptionClicked(option)} 
+              onClick={() => { onOptionClicked(option); }} 
               className={(option === selectedOption ? 'selected selected-item' : '') + ' selectable-item'}
             >
               {capitalizedValue}

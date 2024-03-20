@@ -11,9 +11,9 @@ export async function fetchPhantoms(controller?: AbortController): Promise<IPhan
     const allPhantoms: IPhantom[] = await response.json();
     return allPhantoms;
   } catch (error) {
-    return Promise.reject();
+    return Promise.reject(error instanceof Error ? error : new Error('Cannot fetch phantoms'));
   }
-};
+}
 
 export const renamePhantom = (phantomList: IPhantom[], phantomId: string): IPhantom[] => {
   console.info(`Renaming phantom ${phantomId}`);

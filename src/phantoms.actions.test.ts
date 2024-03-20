@@ -27,8 +27,8 @@ describe('duplicatePhantom', () => {
         const resultPhantoms: IPhantom[] = duplicatePhantom(phantomList, phantomList[0].id);
         expect(resultPhantoms.length).toBe(2);
 
-        let originalPhantom = { ...resultPhantoms[0] };
-        let duplicatedPhantom = { ...resultPhantoms[1] };
+        const originalPhantom = { ...resultPhantoms[0] };
+        const duplicatedPhantom = { ...resultPhantoms[1] };
         expect(originalPhantom.name).toEqual(duplicatedPhantom.name);
         expect(originalPhantom.script).toEqual(duplicatedPhantom.script);
         expect(originalPhantom.manifest).toEqual(duplicatedPhantom.manifest);

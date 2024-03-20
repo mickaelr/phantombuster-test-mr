@@ -21,12 +21,12 @@ function FilterPanel(props: {categories: Set<string>, onFilterChange: (filters: 
       category: categoryFilter
     }
     props.onFilterChange(filters);
-  }, [searchValue, categoryFilter]);
+  }, [searchValue, categoryFilter, props.onFilterChange]);
 
   return (
     <div className="min-w-32">
       <SearchInput name='Phantom Search' placeholder='Search' onChange={handleSearch} />
-      <SelectableList label='Categories' options={props.categories} onChange={(option) => handleCategoryFiltering(option)} />
+      <SelectableList label='Categories' options={props.categories} onChange={(option) => { handleCategoryFiltering(option); }} />
     </div>
   )
 }

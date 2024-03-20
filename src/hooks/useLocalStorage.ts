@@ -23,7 +23,7 @@ export default function useLocalStorage<T>(storageKey: string, fallbackState: T)
   
     useEffect(() => {
       localStorage.setItem(storageKey, JSON.stringify(value));
-    }, [value]);
+    }, [storageKey, value]);
   
     return [value, setValue];
-  };
+  }

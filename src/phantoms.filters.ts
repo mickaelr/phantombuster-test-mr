@@ -5,7 +5,7 @@ export const filterById: IPhantomFilterFunction<string> = (phantoms: IPhantom[],
 }
 
 export const extractPhantomsCategories = (phantoms: IPhantom[]): Set<string> => {
-  let resultCategories: Set<string> = new Set();
+  const resultCategories: Set<string> = new Set();
   phantoms.map((phantom: IPhantom) => {
     phantom.manifest.tags.categories.forEach((category: string) => resultCategories.add(category))
   });

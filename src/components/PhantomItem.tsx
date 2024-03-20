@@ -27,10 +27,10 @@ function PhantomItem(props: IPhantom & { actions?: IPhantomActions }) {
   return (
     <div className="card text-slate-500">
       <div className="flex justify-between">
-        <Link to={`${props.id}`}>
+        <Link to={props.id}>
           <h2 className="h2 mb-3">{ props.name }</h2>
         </Link>
-        {(phantomMenuItems && phantomMenuItems.length > 0) ? (
+        {(phantomMenuItems.length > 0) ? (
           <DropdownMenu items={phantomMenuItems} refId={props.id}>
             <EllipsisHorizontalIcon className="icon-sm" />
           </DropdownMenu>
@@ -38,7 +38,7 @@ function PhantomItem(props: IPhantom & { actions?: IPhantomActions }) {
       </div>
       <div className="flex items-center flex-wrap gap-3">
         {props.repeatedLaunchTimes?.simplePreset ? (
-          <span>{ props.repeatedLaunchTimes?.simplePreset }</span>
+          <span>{ props.repeatedLaunchTimes.simplePreset }</span>
         ) : null}
         {(props.repeatedLaunchTimes?.simplePreset && props.nextLaunchIn) ? (
           <span className="border-l-2 h-4 border-slate-300"></span>
