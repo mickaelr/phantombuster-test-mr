@@ -5,7 +5,6 @@ export default function useClickedOutside<T extends HTMLElement>() {
     const ref = useRef<T>(null);
 
     function handleClickOutside(event: MouseEvent) {
-        console.log(ref.current);
         const target = event.target as HTMLElement;
         if (ref.current && !ref.current.contains(target)) {
             setClickedOutside(true);

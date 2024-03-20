@@ -1,4 +1,4 @@
-import { Suspense, lazy, useCallback, useEffect, useMemo, useState } from 'react'
+import { Suspense, lazy, useCallback, useEffect, useMemo, useReducer, useState } from 'react'
 import PhantomList from './PhantomList';
 import { IPhantom, IPhantomActions, IPhantomFilterValues } from '../../phantoms';
 import useLocalStorage from '../../hooks/useLocalStorage';
@@ -19,14 +19,22 @@ function DashboardPage() {
   });
   const [phantoms, setPhantoms] = useLocalStorage<IPhantom[]>('phantoms', []);
   const [phantomsLoading, setPhantomsLoading] = useState<boolean>(false);
-  //TODO: check if we could use useReducer to simplify displayedPhantoms state
-  const [displayedPhantoms, setDisplayedPhantoms] = useState<IPhantom[]>([]);
-  const [categories, setCategories] = useState<Set<string>>(new Set());
+
+  const phantomsReducer = (): IPhantom[] => {
+    console.info('updating filtering');
+    return filterPhantoms(phantoms, filters);
+  }
+  const [displayedPhantoms, dispatchPhantoms] = useReducer(phantomsReducer, phantoms);
+  const categoriesReducer = (): Set<string> => {
+    console.info('updating categories');
+    return extractPhantomsCategories(phantoms);
+  }
+  const [categories, dispatchCategories] = useReducer(categoriesReducer, new Set());
 
   // memoized variables to avoid weird behaviours due to the way Javascript compare objects (by references instead of contents)
   const phantomsDependency: string = useMemo(() => phantoms.map((phantom) => phantom.id).join(','), [phantoms]);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   async function getPhantoms(controller?: AbortController): Promise<void> {
     if(phantoms.length === 0) {
@@ -75,7 +83,9 @@ function DashboardPage() {
   }, [])
 
   const resetCache = (): void => {
-    localStorage.removeItem('phantoms');
+    if(localStorage.getItem('phantoms') !== null) {
+      localStorage.removeItem('phantoms');
+    }
     //Naive approach to reload phantoms fetching logic, there's probably a better way
     navigate(0);
   }
@@ -89,11 +99,15 @@ function DashboardPage() {
   useEffect(() => {
     const controller = new AbortController();
     getPhantoms(controller)
-    .catch(() => { 
-      navigate("/error");
+    .catch((error) => { 
+      if(error instanceof DOMException && error.name === 'AbortError') {
+        console.log('Aborted by the user');
+      } else {
+        navigate("/error");
+      }
     });
 
-    // cleanup function to avoid a fetch request to continue 
+    // cleanup function to avoid a fetch request to continue
     return () => {
       controller.abort();
     };
@@ -106,12 +120,9 @@ function DashboardPage() {
     if(filters.category) { newUrlParams['category'] = filters.category }
     setUrlParams(newUrlParams);
 
-    console.info('updating categories');
-    setCategories(extractPhantomsCategories(phantoms));
-
-    console.info('updating filtering');
-    setDisplayedPhantoms(filterPhantoms(phantoms, filters));
-  }, [phantomsDependency, filters.search, filters.category]);
+    dispatchCategories();
+    dispatchPhantoms();
+  }, [phantomsDependency, filters.search, filters.category, setUrlParams]);
 
   return (
     <div className="container mx-auto my-10">

@@ -48,8 +48,12 @@ function PhantomDetailsPage() {
 
     if(phantomId) {
       getPhantom(phantomId, controller)
-      .catch(() => { 
-        navigate("/error");
+      .catch((error) => { 
+        if(error instanceof DOMException && error.name === 'AbortError') {
+          console.log('Aborted by the user');
+        } else {
+          navigate("/error");
+        }
       });
     } else {
       throw new Error(`Could not display this page for null phantomId`);
