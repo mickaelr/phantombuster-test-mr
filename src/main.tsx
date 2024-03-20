@@ -10,7 +10,7 @@ import PhantomDetailsPage from './pages/phantom-details/PhantomDetailsPage.tsx';
 const router = createBrowserRouter([
   {
     path: '/',
-    loader: () => { return redirect("/phantoms") }
+    loader: () => { return redirect("/phantoms") },
   },
   {
     path: '/phantoms/',
@@ -28,9 +28,13 @@ const router = createBrowserRouter([
       },
     ],
   },
+  {
+    path: '/error',
+    element: <ErrorPage />,
+  },
 ]);
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
+ReactDOM.createRoot(document.getElementById('root') as Element).render(
   <React.StrictMode>
     <RouterProvider router={router} />
   </React.StrictMode>,

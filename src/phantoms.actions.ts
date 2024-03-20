@@ -8,7 +8,7 @@ export async function fetchPhantoms(controller?: AbortController): Promise<IPhan
     if(!response.ok) {
       throw new Error(`HTTP error: ${response.status}`);
     }
-    const allPhantoms: IPhantom[] = await response.json();
+    const allPhantoms: IPhantom[] = await response.json() as IPhantom[];
     return allPhantoms;
   } catch (error) {
     return Promise.reject(error instanceof Error ? error : new Error('Cannot fetch phantoms'));

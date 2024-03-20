@@ -1,4 +1,4 @@
-import { Suspense, lazy, useEffect, useMemo, useState } from 'react'
+import { Suspense, lazy, useCallback, useEffect, useMemo, useState } from 'react'
 import PhantomList from './PhantomList';
 import { IPhantom, IPhantomActions, IPhantomFilterValues } from '../../phantoms';
 import useLocalStorage from '../../hooks/useLocalStorage';
@@ -28,11 +28,11 @@ function DashboardPage() {
     if(phantoms.length === 0) {
       // Nothing retrieved from locaStorage
       setPhantomsLoading(true);
+      
+      // here we could add the catch clause to throw a more user-friendly error (or return an error code that could be used by the UI)
       try {
         const phantoms: IPhantom[] = await fetchPhantoms(controller);
         setPhantoms(phantoms);
-      } catch (error) {
-        throw new Error(`Could not get phantoms: ${error}`);
       } finally {
         setPhantomsLoading(false);
       }
@@ -66,9 +66,9 @@ function DashboardPage() {
     }
   }
 
-  const handleFilterChange = (newFilters: IPhantomFilterValues): void => {
+  const handleFilterChange = useCallback((newFilters: IPhantomFilterValues): void => {
     setFilters(newFilters);
-  }
+  }, [])
 
   const resetCache = (): void => {
     localStorage.removeItem('phantoms');
@@ -84,7 +84,10 @@ function DashboardPage() {
 
   useEffect(() => {
     const controller = new AbortController();
-    getPhantoms(controller);
+    getPhantoms(controller)
+    .catch(() => { 
+      navigate("/error");
+    });
 
     // cleanup function to avoid a fetch request to continue 
     return () => {
