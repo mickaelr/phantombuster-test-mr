@@ -13,17 +13,17 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const empty: Story = {
+export const Empty: Story = {
   args: {},
 };
 
-export const lessThanOneDay: Story = {
+export const LessThanOneDay: Story = {
   args: {
     minutesRemaining: 1351
   },
 };
 
-export const moreThanOneDay: Story = {
+export const MoreThanOneDay: Story = {
   args: {
     minutesRemaining: 5168
   },

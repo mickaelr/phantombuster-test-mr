@@ -14,6 +14,7 @@ const FilterPanel = lazy(() => import('./FilterPanel'));
 function DashboardPage() {
   const [phantoms, setPhantoms] = useLocalStorage<IPhantom[]>('phantoms', []);
   const [phantomsLoading, setPhantomsLoading] = useState<boolean>(false);
+  //TODO: check if we could use useReducer to simplify displayedPhantoms state
   const [displayedPhantoms, setDisplayedPhantoms] = useState<IPhantom[]>([]);
   const [categories, setCategories] = useState<Set<string>>(new Set());
   const [filters, setFilters] = useState<IPhantomFilterValues>({ search: '', category: null });
