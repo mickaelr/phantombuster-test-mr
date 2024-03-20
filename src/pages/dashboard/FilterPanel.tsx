@@ -3,9 +3,9 @@ import SearchInput from '../../components/SearchInput';
 import SelectableList from '../../components/SelectableList';
 import { IPhantomFilterValues } from '../../phantoms';
 
-function FilterPanel(props: {categories: Set<string>, onFilterChange: (filters: IPhantomFilterValues) => void}) {
-  const [searchValue, setSearchValue] = useState<string>('');
-  const [categoryFilter, setCategoryFilter] = useState<string | null>(null);
+function FilterPanel(props: {categories: Set<string>, value: IPhantomFilterValues, onFilterChange: (filters: IPhantomFilterValues) => void}) {
+  const [searchValue, setSearchValue] = useState<string>(props.value.search || '');
+  const [categoryFilter, setCategoryFilter] = useState<string | null>(props.value.category);
 
   const handleSearch = (event: ChangeEvent<HTMLInputElement>): void => {
     setSearchValue(event.target.value);
@@ -25,8 +25,8 @@ function FilterPanel(props: {categories: Set<string>, onFilterChange: (filters: 
 
   return (
     <div className="min-w-32">
-      <SearchInput name='Phantom Search' placeholder='Search' onChange={handleSearch} />
-      <SelectableList label='Categories' options={props.categories} onChange={(option) => { handleCategoryFiltering(option); }} />
+      <SearchInput name='Phantom Search' placeholder='Search' value={searchValue} onChange={handleSearch} />
+      <SelectableList label='Categories' options={props.categories} value={categoryFilter} onChange={(option) => { handleCategoryFiltering(option); }} />
     </div>
   )
 }

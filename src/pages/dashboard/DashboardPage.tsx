@@ -6,18 +6,22 @@ import { deletePhantom, duplicatePhantom, fetchPhantoms, renamePhantom } from '.
 import { extractPhantomsCategories, filterPhantoms } from '../../phantoms.filters';
 import Loader from '../../components/Loader';
 import { ArrowPathIcon } from '@heroicons/react/24/outline';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 const FilterPanel = lazy(() => import('./FilterPanel'));
 //NOTE: in order to test component lazy loading we can use following import
 // const FilterPanel = lazy(() => delayForDemo(import('./FilterPanel')));
 
 function DashboardPage() {
+  const [urlParams, setUrlParams] = useSearchParams();
+  const [filters, setFilters] = useState<IPhantomFilterValues>({ 
+    search: urlParams.get('search') || '', 
+    category: urlParams.get('category') 
+  });
   const [phantoms, setPhantoms] = useLocalStorage<IPhantom[]>('phantoms', []);
   const [phantomsLoading, setPhantomsLoading] = useState<boolean>(false);
   //TODO: check if we could use useReducer to simplify displayedPhantoms state
   const [displayedPhantoms, setDisplayedPhantoms] = useState<IPhantom[]>([]);
   const [categories, setCategories] = useState<Set<string>>(new Set());
-  const [filters, setFilters] = useState<IPhantomFilterValues>({ search: '', category: null });
 
   // memoized variables to avoid weird behaviours due to the way Javascript compare objects (by references instead of contents)
   const phantomsDependency: string = useMemo(() => phantoms.map((phantom) => phantom.id).join(','), [phantoms]);
@@ -96,8 +100,15 @@ function DashboardPage() {
   }, []);
 
   useEffect(() => {
+    console.info(`updating URL params with search=${filters.search} and category=${filters.category}`);
+    const newUrlParams: Record<string, string | string[]> = {};
+    if(filters.search) { newUrlParams['search'] = filters.search }
+    if(filters.category) { newUrlParams['category'] = filters.category }
+    setUrlParams(newUrlParams);
+
     console.info('updating categories');
     setCategories(extractPhantomsCategories(phantoms));
+
     console.info('updating filtering');
     setDisplayedPhantoms(filterPhantoms(phantoms, filters));
   }, [phantomsDependency, filters.search, filters.category]);
@@ -113,7 +124,7 @@ function DashboardPage() {
       <div className="flex flex-row gap-12">
         <div className="min-w-32">
           <Suspense fallback={<Loader />}>
-            <FilterPanel categories={categories} onFilterChange={handleFilterChange} />
+            <FilterPanel categories={categories} value={filters} onFilterChange={handleFilterChange} />
           </Suspense>
         </div>
         <div className="grow">

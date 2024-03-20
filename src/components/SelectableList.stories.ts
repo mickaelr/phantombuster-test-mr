@@ -22,6 +22,7 @@ export const SimpleSelectableList: Story = {
       'option 2',
       'option 3',
     ]),
+    value: null,
     onChange: () => { console.log('selected value changed') },
   },
   play: async ({ canvasElement }) => {

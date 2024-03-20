@@ -3,12 +3,13 @@ import { useId, useState } from "react";
 type SelectableListProps = {
     label: string;
     options: Set<string>;
+    value?: string | null;
     onChange: (value: string | null) => void;
   }
 
 function SelectableList(props: SelectableListProps) {
   const id = useId();
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+  const [selectedOption, setSelectedOption] = useState<string | null>(props.value || null);
 
   const onOptionClicked = (option: string) => {
     if(selectedOption !== option) {

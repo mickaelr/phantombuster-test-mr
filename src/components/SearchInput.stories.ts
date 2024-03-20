@@ -17,6 +17,7 @@ export const SimpleSearchInput: Story = {
   args: {
     name: 'Simple search input',
     placeholder: 'Simple SearchInput',
+    value: '',
     onChange: () => { console.log('input value changed') },
   },
 };
