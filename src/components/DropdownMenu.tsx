@@ -1,4 +1,5 @@
-import { ReactNode, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
+import useClickedOutside from '../hooks/useClickedOutside';
 
 export type DropdownMenuItem = {
   text: string;
@@ -7,13 +8,21 @@ export type DropdownMenuItem = {
 
 function DropdownMenu(props: { items: DropdownMenuItem[], refId: string, children: ReactNode }) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { ref, clickedOutside, setClickedOutside } = useClickedOutside<HTMLDivElement>();
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
   };
 
+  useEffect(() => {
+    if(clickedOutside) {
+      setMenuOpen(false);
+      setClickedOutside(false);
+    }
+  }, [clickedOutside, setClickedOutside]);
+
   return (
-    <div className='relative'>
+    <div ref={ref} className='relative'>
       <button onClick={toggleMenu}>{props.children}</button>
       {menuOpen ? (
         <ul className='dropdown-menu-container'>
